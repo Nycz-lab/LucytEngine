@@ -16,3 +16,4 @@ lib
 *.dylib
 gladsources
 bin
+src/lucyt_version.h
