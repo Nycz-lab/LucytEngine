@@ -1,0 +1,6 @@
+#ifndef LUCYT_VERSION_H_
+#define LUCYT_VERSION_H_
+#define LUCYT_VERSION "@LUCYT_VERSION@"
+#define LUCYT_AUTHOR "Nycz"
+#define LUCYT_NAME "Lucyt-Engine"
+#endif  /* LUCYT_VERSION_H_ */

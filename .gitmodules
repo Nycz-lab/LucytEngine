@@ -1,0 +1,8 @@
+[submodule "third-party/SDL"]
+	path = third-party/SDL
+	url = https://github.com/libsdl-org/SDL.git
+	branch = release-3.2.x
+[submodule "third-party/glad"]
+	path = third-party/glad
+	url = https://github.com/Dav1dde/glad.git
+	branch = glad2
