@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 project(LucytEngine)
 
@@ -33,7 +33,7 @@ glad_add_library(glad_gl_core_33 SHARED API gl:core=3.3)
 # add_subdirectory(src)
 # add_subdirectory(include)
 
-add_executable( LucytEngine ${PROJECT_SOURCE_DIR}/src/main.cpp )
+add_executable( LucytEngine ${PROJECT_SOURCE_DIR}/src/main.cpp ${PROJECT_SOURCE_DIR}/src/opengl_shader.cpp)
 
 if(LUCYT_STATIC)
     target_link_libraries(LucytEngine PUBLIC SDL3::SDL3-static glad_gl_core_33)
