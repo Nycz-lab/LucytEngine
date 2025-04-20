@@ -19,3 +19,7 @@ lib
 gladsources
 bin
 src/lucyt_version.h
+.clangd
+compile_commands.json
+build
+.cache

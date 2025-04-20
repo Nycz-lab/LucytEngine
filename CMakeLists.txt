@@ -51,3 +51,4 @@ add_custom_target(version
   )
 add_dependencies(LucytEngine version)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
