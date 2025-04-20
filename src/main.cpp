@@ -1,5 +1,4 @@
 
-#include <GLES2/gl2.h>
 #include <iostream>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_video.h>
@@ -29,6 +28,11 @@ int init_sdl(){
 
 
     SDL_WindowFlags flags = SDL_WINDOW_OPENGL;
+
+    // Request OpenGL 3.3 Core Profile (Required on macOS)
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     SDL_Window* window = SDL_CreateWindow(WINDOW_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, flags);
     SDL_GLContext ctx = SDL_GL_CreateContext( window );
