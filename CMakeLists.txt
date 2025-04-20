@@ -19,14 +19,15 @@ endif()
 
 if(LUCYT_VENDORED)
     add_subdirectory(third-party/SDL EXCLUDE_FROM_ALL)
-    add_subdirectory(third-party/glad/cmake EXCLUDE_FROM_ALL)
-    glad_add_library(glad_gl_core_33 SHARED API gl:core=3.3)
+
     message("using vendored libraries")
 else()
     find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
-    find_package(GLAD REQUIRED)
     message("using system libraries")
 endif()
+
+add_subdirectory(third-party/glad/cmake EXCLUDE_FROM_ALL)
+glad_add_library(glad_gl_core_33 SHARED API gl:core=3.3)
 
 
 # add_subdirectory(src)
