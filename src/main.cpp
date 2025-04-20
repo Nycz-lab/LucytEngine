@@ -43,9 +43,9 @@ int init_sdl(){
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     float vertices[] = {
         // positions         // colors
-         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
+         0.5f, 0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+        -0.5f, 0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+         0.0f,  -0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
     };
 
     GLuint VBO;
@@ -68,7 +68,7 @@ int init_sdl(){
     SDL_Event event;
 
     bool running = true;
-
+    float off = 0.0f;
     while(running){
         SDL_PollEvent(&event);
 
@@ -78,10 +78,11 @@ int init_sdl(){
         glClear(GL_COLOR_BUFFER_BIT);
 
         bruh.render();
+        bruh.setFloat("offset", off);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-
+        off+=0.001;
 
         SDL_GL_SwapWindow(window);
     }
