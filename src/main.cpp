@@ -11,6 +11,9 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
+SDL_Window* window;
+SDL_GLContext ctx;
+
 void process_input(SDL_Event* event, bool* running){
     if (event->type == SDL_EVENT_QUIT || event->type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
     {
@@ -34,17 +37,29 @@ int init_sdl(){
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    SDL_Window* window = SDL_CreateWindow(WINDOW_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, flags);
-    SDL_GLContext ctx = SDL_GL_CreateContext( window );
-
-
+    
+    window = SDL_CreateWindow(WINDOW_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, flags);
+    ctx = SDL_GL_CreateContext( window );
+    
+    
     if (!gladLoadGL(SDL_GL_GetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
 
+    const GLubyte *renderer = glGetString(GL_RENDERER);
+    const GLubyte *version = glGetString(GL_VERSION);
+    std::cout << "Renderer: " << renderer << std::endl;
+    std::cout << "OpenGL Version: " << version << std::endl;
+    
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    return 0;
+}
+
+void playground(){
+
     float vertices[] = {
         // positions         // colors
          0.5f, 0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
@@ -90,17 +105,18 @@ int init_sdl(){
 
         SDL_GL_SwapWindow(window);
     }
-
-    return 0;
 }
 
 int main(int argc, char** argv){
 
     std::cout << LUCYT_NAME << " version: " << LUCYT_VERSION << " by " << LUCYT_AUTHOR << std::endl;
 
-    init_sdl();
+    if(init_sdl() != 0){
+        return -1;
+    }
 
-    OpenGL_Shader shader = OpenGL_Shader("bruh");
+    playground();
+    
 
     return 0;
 }
