@@ -6,6 +6,7 @@
 #include "SDL3/SDL_events.h"
 #include "lucyt_version.h"
 #include "opengl_shader.h"
+#include "spdlog/spdlog.h"
 
 #define WINDOW_NAME "LucytEngine Window"
 #define WINDOW_WIDTH 640
@@ -23,9 +24,11 @@ void process_input(SDL_Event* event, bool* running){
 
 int init_sdl(){
 
+    spdlog::info("initializing sdl...");
+
     if ( !SDL_Init(SDL_INIT_VIDEO) ){
         /* Failed initializing */
-        std::cout << "failed initializing sdl video, exiting";
+        spdlog::critical("failed initializing sdl video, exiting");
         return -1;
     }
 
@@ -44,14 +47,14 @@ int init_sdl(){
     
     if (!gladLoadGL(SDL_GL_GetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        spdlog::critical("Failed to initialize GLAD, exiting");
         return -1;
     }
 
     const GLubyte *renderer = glGetString(GL_RENDERER);
     const GLubyte *version = glGetString(GL_VERSION);
-    std::cout << "Renderer: " << renderer << std::endl;
-    std::cout << "OpenGL Version: " << version << std::endl;
+    spdlog::info("Renderer: {}", (char*) renderer);
+    spdlog::info("OpenGL Version: {}", (char*) version);
     
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -108,9 +111,9 @@ void playground(){
 }
 
 int main(int argc, char** argv){
-
-    std::cout << LUCYT_NAME << " version: " << LUCYT_VERSION << " by " << LUCYT_AUTHOR << std::endl;
-
+    spdlog::info("Initializing {}, version {} by {}", LUCYT_NAME, LUCYT_VERSION, LUCYT_AUTHOR);
+    //spdlog::set_level(spdlog::level::critical);
+    
     if(init_sdl() != 0){
         return -1;
     }

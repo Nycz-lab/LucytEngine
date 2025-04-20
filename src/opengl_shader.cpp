@@ -1,5 +1,6 @@
 #include "opengl_shader.h"
 #include <fstream>
+#include "spdlog/spdlog.h"
 
 OpenGL_Shader::OpenGL_Shader(const char* name){
     this->name = name;
@@ -10,6 +11,8 @@ OpenGL_Shader::OpenGL_Shader(const char* name){
     std::string frag_path = std::format(
             "{}{}_frag.glsl", SHADER_PATH, name);
 
+    spdlog::debug("Vertex Shader Path: {} ; Fragment Shader Path {}", vert_path, frag_path);
+
 
     this->init(vert_path.c_str(), frag_path.c_str());
 }
@@ -19,8 +22,6 @@ void OpenGL_Shader::init(const char* vertexPath, const char* fragmentPath){
 
     std::string vertexCode = read_shader_source(vertexPath);
     std::string fragCode = read_shader_source(fragmentPath);
-
-    //std::cout << vertexCode << std::endl << fragCode;
 
     this->vert_shader_id = this->compile(vertexCode.c_str(), GL_VERTEX_SHADER);
     this->frag_shader_id = this->compile(fragCode.c_str(), GL_FRAGMENT_SHADER);
@@ -49,8 +50,7 @@ std::string OpenGL_Shader::read_shader_source(const char* path){
         code = ShaderStream.str();
     }
     catch(std::ifstream::failure e){
-        std::cout << "Error reading shader files for shader " << this->name
-            << " at " << path;
+        spdlog::error("Error reading shader files for shader {} at {}", this->name, path);
         return "";
     }
 
@@ -58,18 +58,33 @@ std::string OpenGL_Shader::read_shader_source(const char* path){
 }
 
 GLuint OpenGL_Shader::compile(const char* shader_src, GLenum shader_type){
+
+    // we need this since we cant print the enum name
+    const char* shader_type_str;
+
+    switch(shader_type){
+        case GL_VERTEX_SHADER: shader_type_str = "Vertex Shader"; break;
+        case GL_FRAGMENT_SHADER: shader_type_str = "Fragment Shader"; break;
+        default: return 0; // TODO throw exception or sum
+    }
+
+    spdlog::info("compiling {} for {}", shader_type_str, this->name);
+    // compile shader
     GLuint shader = glCreateShader(shader_type);
     glShaderSource(shader, 1, &shader_src, NULL);
     glCompileShader(shader);
 
+    // get infoLog buffer size per opengl implementation
+    GLint infoLogSize;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogSize);
+
     GLint success;
-    GLchar infoLog[512];
+    GLchar infoLog[infoLogSize];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
     if(!success){
         glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        std::cout << "Shader Compilation failed for shader: " << this->name
-        << " failed with error: " << infoLog << std::endl;
+        spdlog::error("Shader Compilation failed for shader: {} failed with error: {}", this->name, (char*) infoLog);
     }
 
     return shader;
@@ -87,7 +102,7 @@ GLuint OpenGL_Shader::link(){
     glGetShaderiv(shader_program, GL_LINK_STATUS, &success);
     if(!success){
         glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
-        std::cout << "Shader Linking failed: \n" << infoLog << std::endl;
+        spdlog::error("Shader Linking failed, with error: {}", (char*) infoLog);
     }
 
     glDeleteShader(this->vert_shader_id);

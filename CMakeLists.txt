@@ -19,10 +19,11 @@ endif()
 
 if(LUCYT_VENDORED)
     add_subdirectory(third-party/SDL EXCLUDE_FROM_ALL)
-
+    add_subdirectory(third-party/spdlog EXCLUDE_FROM_ALL)
     message("using vendored libraries")
 else()
     find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
+    find_package(spdlog)
     message("using system libraries")
 endif()
 
@@ -36,9 +37,9 @@ glad_add_library(glad_gl_core_33 SHARED API gl:core=3.3)
 add_executable( LucytEngine ${PROJECT_SOURCE_DIR}/src/main.cpp ${PROJECT_SOURCE_DIR}/src/opengl_shader.cpp)
 
 if(LUCYT_STATIC)
-    target_link_libraries(LucytEngine PUBLIC SDL3::SDL3-static glad_gl_core_33)
+    target_link_libraries(LucytEngine PUBLIC SDL3::SDL3-static glad_gl_core_33 spdlog)
 else()
-    target_link_libraries(LucytEngine PUBLIC SDL3::SDL3-shared glad_gl_core_33)
+    target_link_libraries(LucytEngine PUBLIC SDL3::SDL3-shared glad_gl_core_33 spdlog)
 endif()
 
 
