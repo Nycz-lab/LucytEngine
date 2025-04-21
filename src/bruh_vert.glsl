@@ -10,6 +10,6 @@ out vec2 tex;
 void main()
 {
     gl_Position = vec4(aPos.x + offset, aPos.yz, 1.0);
-    col = aCol;
+    col = aCol * (gl_Position.x * 2);
     tex = aTexCoord;
 }

@@ -102,7 +102,6 @@ void playground(){
         return;
     }
 
-    glUniform1i(glGetUniformLocation(texture, "ourTexture"), 0);
 
 
     GLuint VBO;
@@ -142,12 +141,11 @@ void playground(){
         bruh.render();
         bruh.setFloat("offset", off);
 
-        glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
         glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        // off+=0.001;
+        off+=0.00001;
 
         SDL_GL_SwapWindow(window);
     }
